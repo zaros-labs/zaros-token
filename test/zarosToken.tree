@@ -1,10 +1,17 @@
 ZarosToken_Integration_Test
 ├── when user is not in the allow list and calls mint function
+│   ├── it should emit {UserNotAllowed} event
 │   └── it should revert
 ├── when user is not in the allow list checks if he has access
 │   └── it should return false
 ├── when user is in the allow list and calls mint function
 │   ├── it should mint
 │   └── it should emit {LogMint} event
-└── when user is in the allow list checks if he has access
-    └── it should return true
+├── when user is in the allow list checks if he has access
+│   └── it should return true
+├── when user is not owner and tries to update allow list
+│   └── it should revert
+├── when user is owner and calls updateArrayOfAddresses function
+│   └── it should emit {LogUpdateAllowList} event
+└── when user is owner and calls updateArrayOfAddresses function with differente arrays
+    └── it should revert

@@ -12,11 +12,11 @@ contract ZarosToken is UUPSUpgradeable, ERC20PermitUpgradeable, OwnableUpgradeab
     /// @notice Emitted when the array length of addresses is not equal to the array length of booleans
     /// @param addresses Array of addresses
     /// @param isAllowed Array of booleans
-    error ZarosToken_ArrayMustBeOfEqualLength(address[] addresses, bool[] isAllowed);
+    error ArrayMustBeOfEqualLength(address[] addresses, bool[] isAllowed);
 
     /// @notice Emitted when the user is not allowed to mint
     /// @param user Address that is not allowed to mind
-    error ZarosToken_UserNotAllowed(address user);
+    error UserNotAllowed(address user);
 
     /// @notice Emitted when the allow list is updated
     /// @param user Address that was updated
@@ -43,7 +43,7 @@ contract ZarosToken is UUPSUpgradeable, ERC20PermitUpgradeable, OwnableUpgradeab
     /// @param amount Amount of tokens to mint
     function mint(address to, uint256 amount) external {
         if (allowList[to] == false) {
-            revert ZarosToken_UserNotAllowed(to);
+            revert UserNotAllowed(to);
         }
 
         _mint(to, amount);
@@ -56,7 +56,7 @@ contract ZarosToken is UUPSUpgradeable, ERC20PermitUpgradeable, OwnableUpgradeab
     /// @param _isAllowed Array of booleans to ser the adresses
     function updateArrayOfAddresses(address[] memory _addresses, bool[] memory _isAllowed) external onlyOwner {
         if (_addresses.length != _isAllowed.length) {
-            revert ZarosToken_ArrayMustBeOfEqualLength(_addresses, _isAllowed);
+            revert ArrayMustBeOfEqualLength(_addresses, _isAllowed);
         }
 
         for (uint256 i = 0; i < _addresses.length; i++) {
@@ -76,7 +76,7 @@ contract ZarosToken is UUPSUpgradeable, ERC20PermitUpgradeable, OwnableUpgradeab
     /// @notice Check if the user has permission to mint
     /// @param _user Address to check
     /// @return Boolean if the user has permission
-    function checkIfTheUserHasPermission(address _user) public view returns (bool){
+    function checkIfTheUserHasPermission(address _user) public view returns (bool) {
         return allowList[_user];
     }
 
