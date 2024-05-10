@@ -91,8 +91,8 @@ contract ZarosToken_Integration_Test is Test {
         addresses[1] = users.sakura;
 
         bool[] memory isAllowed = new bool[](2);
-        isAllowed[0] = true;  
-        isAllowed[1] = false;   
+        isAllowed[0] = true;
+        isAllowed[1] = false;
 
         // it should revert
         vm.expectRevert({
@@ -104,12 +104,12 @@ contract ZarosToken_Integration_Test is Test {
 
     function test_WhenUserIsOwnerAndCallsUpdateArrayOfAddressesFunction(uint256 quantityOfUsers) external {
         vm.startPrank(users.owner);
-        quantityOfUsers = bound(quantityOfUsers, 1, 1_000);
+        quantityOfUsers = bound(quantityOfUsers, 1, 1000);
 
         address[] memory addresses = new address[](quantityOfUsers);
         bool[] memory isAllowed = new bool[](quantityOfUsers);
 
-        for(uint256 i = 0; i < quantityOfUsers; i++) {
+        for (uint256 i = 0; i < quantityOfUsers; i++) {
             addresses[i] = address(uint160(i));
             isAllowed[i] = i % 2 == 0 ? true : false;
 
@@ -118,7 +118,7 @@ contract ZarosToken_Integration_Test is Test {
             emit ZarosToken.LogUpdateAllowList(addresses[i], isAllowed[i]);
         }
 
-        ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed); 
+        ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed);
     }
 
     function test_RevertWhen_UserIsOwnerAndCallsUpdateArrayOfAddressesFunctionWithDifferenteArrays() external {
@@ -129,13 +129,13 @@ contract ZarosToken_Integration_Test is Test {
         addresses[1] = users.sakura;
 
         bool[] memory isAllowed = new bool[](1);
-        isAllowed[0] = true;   
+        isAllowed[0] = true;
 
         // it should revert
         vm.expectRevert({
             revertData: abi.encodeWithSelector(ZarosToken.ArrayMustBeOfEqualLength.selector, addresses, isAllowed)
         });
 
-        ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed); 
+        ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed);
     }
 }

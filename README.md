@@ -1,3 +1,13 @@
+# Zaros Token
+
+- Check your .env with .env.example
+
+- Script to deploy:
+
+```
+forge script script/DeployZarosToken.s.sol:DeployZarosToken  --rpc-url arbitrum_sepolia --broadcast -vvvv
+```
+
 # Name 
 
 <p align="center">
