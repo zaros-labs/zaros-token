@@ -1,0 +1,6 @@
+Mint_Integration_Test
+├── given user is not allowed to mint
+│   └── it should revert
+└── given user is allowed to mint
+    ├── it should mint
+    └── it should emit {LogMint} event

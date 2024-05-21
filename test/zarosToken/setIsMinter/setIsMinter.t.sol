@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity 0.8.25;
+
 // ZarosToken dependencies
 import { Base } from "test/Base.t.sol";
 import { ZarosToken } from "@zaros/ZarosToken.sol";
