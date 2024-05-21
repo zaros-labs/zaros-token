@@ -65,7 +65,7 @@ contract ZarosToken_Integration_Test is Test {
         _;
     }
 
-    function test_GivenUserIsTheOwnerAndTryToUpdateTheAddressList(uint256 quantityOfUsers) external givenUserIsTheOwner {
+    function testFuzz_GivenUserIsTheOwnerAndTryToUpdateTheAddressList(uint256 quantityOfUsers) external givenUserIsTheOwner {
         vm.startPrank(users.owner);
         quantityOfUsers = bound(quantityOfUsers, 1, 1000);
 
@@ -128,7 +128,7 @@ contract ZarosToken_Integration_Test is Test {
         _;
     }
 
-    function test_GivenUserIsInTheAllowListAndCallsMintFunction(uint256 amount) external givenUserIsInTheAllowList {
+    function testFuzz_GivenUserIsInTheAllowListAndCallsMintFunction(uint256 amount) external givenUserIsInTheAllowList {
         vm.startPrank(users.owner);
         amount = bound(amount, 1, 100_000_000e18);
 
