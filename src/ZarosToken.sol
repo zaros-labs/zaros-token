@@ -29,6 +29,10 @@ contract ZarosToken is UUPSUpgradeable, OwnableUpgradeable, ERC20PermitUpgradeab
         __Ownable_init(owner);
     }
 
+    /// @notice Allows or disallows a given address to be a minter.
+    /// @dev Only the contract owner can call this function.
+    /// @param user Address of the user.
+    /// @param isAllowed True if the user is allowed to mint tokens
     function setIsMinter(address user, bool isAllowed) external onlyOwner {
         isMinter[user] = isAllowed;
 
