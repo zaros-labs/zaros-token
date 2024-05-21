@@ -11,8 +11,8 @@ import { ERC1967Proxy } from "@openzeppelin/proxy/ERC1967/ERC1967Proxy.sol";
 // Forge dependencies
 import { console } from "forge-std/console.sol";
 
-contract DeployZarosToken is BaseScript{
-    function run() public broadcaster{
+contract DeployZarosToken is BaseScript {
+    function run() public broadcaster {
         address zarosTokenImplementation = address(new ZarosToken());
 
         bytes memory zarosTokenInitializeData =
