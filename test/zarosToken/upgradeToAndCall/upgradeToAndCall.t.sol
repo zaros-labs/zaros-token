@@ -9,6 +9,12 @@ import { ZarosToken } from "@zaros/ZarosToken.sol";
 import { UUPSUpgradeable } from "@openzeppelin/proxy/utils/UUPSUpgradeable.sol";
 import { OwnableUpgradeable } from "@openzeppelin-upgradeable/access/OwnableUpgradeable.sol";
 
+contract NewZarosToken is ZarosToken {
+    function newFunctionToTest() public pure returns (string memory) {
+        return "new function to test";
+    }
+}
+
 contract UpgradeToAndCall_Integration_Test is Base {
     function setUp() public override {
         Base.setUp();
@@ -17,7 +23,7 @@ contract UpgradeToAndCall_Integration_Test is Base {
     function test_RevertGiven_UserIsNotTheOwner() external {
         vm.startPrank(users.naruto);
 
-        address newZarosTokenImplementation = address(new ZarosToken());
+        address newZarosTokenImplementation = address(new NewZarosToken());
 
         // it should revert
         vm.expectRevert({
@@ -30,9 +36,11 @@ contract UpgradeToAndCall_Integration_Test is Base {
     function test_GivenUserIsTheOwner() external {
         vm.startPrank(users.owner);
 
-        address newZarosTokenImplementation = address(new ZarosToken());
+        address newZarosTokenImplementation = address(new NewZarosToken());
 
         // it should upgrade the contract
         UUPSUpgradeable(address(zarosToken)).upgradeToAndCall(newZarosTokenImplementation, bytes(""));
+
+        assertEq(NewZarosToken(address(zarosToken)).newFunctionToTest(), "new function to test");
     }
 }
