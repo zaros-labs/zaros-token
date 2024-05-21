@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity 0.8.25;
 
 // Zaros dependecies
 import { ZarosToken } from "@zaros/ZarosToken.sol";
@@ -31,52 +31,11 @@ contract ZarosToken_Integration_Test is Test {
         zarosToken = address(new ERC1967Proxy(zarosTokenImplementation, zarosTokenInitializeData));
     }
 
-    function test_RevertWhen_UserIsNotInTheAllowListAndCallsMintFunction() external {
-        vm.startPrank(users.naruto);
-
-        // it should revert
-        vm.expectRevert({ revertData: abi.encodeWithSelector(ZarosToken.UserNotAllowed.selector, users.naruto) });
-
-        ZarosToken(zarosToken).mint(users.naruto, 100);
+    modifier givenUserIsNotTheOwner() {
+        _;
     }
 
-    function test_WhenUserIsNotInTheAllowListChecksIfHeHasAccess() external {
-        vm.startPrank(users.naruto);
-
-        // it should return false
-        (bool isAllowed) = ZarosToken(zarosToken).checkIfTheUserHasPermission(users.naruto);
-
-        assertEq(isAllowed, false, "isAllowed should be false");
-    }
-
-    function test_WhenUserIsInTheAllowListAndCallsMintFunction(uint256 amount) external {
-        vm.startPrank(users.owner);
-        amount = bound(amount, 1, 100_000_000e18);
-
-        ZarosToken(zarosToken).updateAllowList(users.naruto, true);
-
-        // it should emit {LogMint} event
-        vm.expectEmit({ emitter: zarosToken });
-        emit ZarosToken.LogMint(users.naruto, amount);
-
-        // it should mint
-        ZarosToken(zarosToken).mint(users.naruto, amount);
-
-        assertEq(ZarosToken(zarosToken).balanceOf(users.naruto), amount, "balance should be equal to amount");
-    }
-
-    function test_WhenUserIsInTheAllowListChecksIfHeHasAccess() external {
-        vm.startPrank(users.owner);
-
-        ZarosToken(zarosToken).updateAllowList(users.naruto, true);
-
-        // it should mint
-        (bool isAllowed) = ZarosToken(zarosToken).checkIfTheUserHasPermission(users.naruto);
-
-        assertEq(isAllowed, true, "isAllowed should be true");
-    }
-
-    function test_RevertWhen_UserIsNotOwnerAndTriesToUpdateAllowList() external {
+    function test_RevertGiven_UserIsNotTheOwnerAndTryToUpdateTheAddressList() external givenUserIsNotTheOwner {
         vm.startPrank(users.naruto);
 
         // it should revert
@@ -102,7 +61,11 @@ contract ZarosToken_Integration_Test is Test {
         ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed);
     }
 
-    function test_WhenUserIsOwnerAndCallsUpdateArrayOfAddressesFunction(uint256 quantityOfUsers) external {
+    modifier givenUserIsTheOwner() {
+        _;
+    }
+
+    function test_GivenUserIsTheOwnerAndTryToUpdateTheAddressList(uint256 quantityOfUsers) external givenUserIsTheOwner {
         vm.startPrank(users.owner);
         quantityOfUsers = bound(quantityOfUsers, 1, 1000);
 
@@ -121,7 +84,7 @@ contract ZarosToken_Integration_Test is Test {
         ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed);
     }
 
-    function test_RevertWhen_UserIsOwnerAndCallsUpdateArrayOfAddressesFunctionWithDifferenteArrays() external {
+    function test_RevertGiven_TheArrayOfAddressesAndPermissionsHasADifferentLength() external givenUserIsTheOwner {
         vm.startPrank(users.owner);
 
         address[] memory addresses = new address[](2);
@@ -137,5 +100,58 @@ contract ZarosToken_Integration_Test is Test {
         });
 
         ZarosToken(zarosToken).updateArrayOfAddresses(addresses, isAllowed);
+    }
+
+    modifier givenUserIsNotInTheAllowList() {
+        _;
+    }
+
+    function test_GivenUserIsNotInTheAllowListAndCallsMintFunction() external givenUserIsNotInTheAllowList {
+        vm.startPrank(users.naruto);
+
+        // it should revert
+        vm.expectRevert({ revertData: abi.encodeWithSelector(ZarosToken.UserNotAllowed.selector, users.naruto) });
+
+        ZarosToken(zarosToken).mint(users.naruto, 100);
+    }
+
+    function test_GivenUserIsNotInTheAllowListChecksIfHeHasAccess() external givenUserIsNotInTheAllowList {
+        vm.startPrank(users.naruto);
+
+        // it should return false
+        (bool isAllowed) = ZarosToken(zarosToken).checkIfTheUserHasPermission(users.naruto);
+
+        assertEq(isAllowed, false, "isAllowed should be false");
+    }
+
+    modifier givenUserIsInTheAllowList() {
+        _;
+    }
+
+    function test_GivenUserIsInTheAllowListAndCallsMintFunction(uint256 amount) external givenUserIsInTheAllowList {
+        vm.startPrank(users.owner);
+        amount = bound(amount, 1, 100_000_000e18);
+
+        ZarosToken(zarosToken).updateAllowList(users.naruto, true);
+
+        // it should emit {LogMint} event
+        vm.expectEmit({ emitter: zarosToken });
+        emit ZarosToken.LogMint(users.naruto, amount);
+
+        // it should mint
+        ZarosToken(zarosToken).mint(users.naruto, amount);
+
+        assertEq(ZarosToken(zarosToken).balanceOf(users.naruto), amount, "balance should be equal to amount");
+    }
+
+    function test_GivenUserIsInTheAllowListChecksIfHeHasAccess() external givenUserIsInTheAllowList {
+        vm.startPrank(users.owner);
+
+        ZarosToken(zarosToken).updateAllowList(users.naruto, true);
+
+        // it should mint
+        (bool isAllowed) = ZarosToken(zarosToken).checkIfTheUserHasPermission(users.naruto);
+
+        assertEq(isAllowed, true, "isAllowed should be true");
     }
 }
