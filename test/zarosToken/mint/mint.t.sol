@@ -14,9 +14,7 @@ contract Mint_Integration_Test is Base {
         vm.startPrank(users.naruto);
 
         // it should revert
-        vm.expectRevert({
-            revertData: abi.encodeWithSelector(ZarosToken.NotMinter.selector)
-        });
+        vm.expectRevert({ revertData: abi.encodeWithSelector(ZarosToken.NotMinter.selector) });
 
         zarosToken.mint(users.naruto, 1e18);
     }

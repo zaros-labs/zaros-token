@@ -7,9 +7,6 @@ import { ZarosToken } from "@zaros/ZarosToken.sol";
 // Open Zeppelin dependencies
 import { ERC1967Proxy } from "@openzeppelin/proxy/ERC1967/ERC1967Proxy.sol";
 
-// Open zeppelin upgradeable dependencies
-import { OwnableUpgradeable } from "@openzeppelin-upgradeable/access/OwnableUpgradeable.sol";
-
 // Forge dependencies
 import { Test } from "forge-std/Test.sol";
 
