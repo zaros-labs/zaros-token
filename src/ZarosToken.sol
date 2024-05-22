@@ -23,10 +23,10 @@ contract ZarosToken is UUPSUpgradeable, OwnableUpgradeable, ERC20PermitUpgradeab
     /// @param amount Amount of ZRS to be minted
     event LogMint(address indexed to, uint256 amount);
 
-    function initialize(address owner, string memory name, string memory symbol) external initializer {
-        __ERC20_init(name, symbol);
-        __ERC20Permit_init(name);
-        __Ownable_init(owner);
+    function initialize(address _owner, string memory _name, string memory _symbol) external initializer {
+        __ERC20_init(_name, _symbol);
+        __ERC20Permit_init(_name);
+        __Ownable_init(_owner);
     }
 
     /// @notice Allows or disallows a given address to be a minter.
