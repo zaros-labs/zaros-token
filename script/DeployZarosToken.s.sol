@@ -16,7 +16,7 @@ contract DeployZarosToken is BaseScript {
         address zarosTokenImplementation = address(new ZarosToken());
 
         bytes memory zarosTokenInitializeData =
-            abi.encodeWithSelector(ZarosToken.initialize.selector, deployer, "Zaros DAO Token", "ZRS");
+            abi.encodeWithSelector(ZarosToken.initialize.selector, deployer, "Zaros Finance", "ZRS");
 
         address zarosToken = address(new ERC1967Proxy(zarosTokenImplementation, zarosTokenInitializeData));
 
